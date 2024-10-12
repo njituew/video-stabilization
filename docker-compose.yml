@@ -1,0 +1,29 @@
+version: '3.8'
+
+services:
+  # Определяем сервис с именем python-app
+  python-app:
+    # Задаем путь к Dockerfile для сборки контейнера
+    build: ./
+    # Открываем порт
+    ports:
+      - "5500:5500"
+    # Монтируем том для сохранения данных
+    volumes:
+      - app-data:/app/data
+    # Устанавливаем имя сети
+    networks:
+      - app-network
+
+networks:
+  # Определяем имя сети
+  app-network:
+    # Устанавливаем драйвер сети и подсеть
+    driver: bridge
+    ipam:
+      config:
+        - subnet: "172.20.0.0/16"
+
+volumes:
+  # Создаем том для данных приложения
+  app-data:

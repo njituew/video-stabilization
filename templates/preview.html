@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Предпросмотр</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #0B0C10;
+            color: #C5C6C7;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+        .content-container {
+            background-color: #1F2833;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+            width: 90%;
+            max-width: 1000px;
+        }
+        video {
+            max-width: 100%;
+            height: auto;
+        }
+        .video-container {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+            gap: 20px;
+        }
+        .video-column {
+            flex: 1;
+            padding: 10px;
+        }
+        .btn-custom {
+            background-color: #66FCF1;
+            border-color: #66FCF1;
+            color: #0B0C10;
+            transition: background-color 0.3s, color 0.3s;
+        }
+        .btn-custom:hover,
+        .btn-custom:focus,
+        .btn-custom:active {
+            background-color: #0B0C10;
+            color: #66FCF1;
+        }
+        .btn-secondary-custom {
+            background-color: #C5C6C7;
+            color: #0B0C10;
+            transition: background-color 0.3s, color 0.3s;
+        }
+        .btn-secondary-custom:hover,
+        .btn-secondary-custom:focus,
+        .btn-secondary-custom:active {
+            background-color: #0B0C10;
+            color: #C5C6C7;
+        }
+        h1 {
+            margin-bottom: 40px;
+            color: #66FCF1;
+        }
+        h3 {
+            color: #C5C6C7;
+        }
+        .btn {
+            margin-bottom: 10px; /* Уменьшено расстояние между кнопками */
+        }
+    </style>
+</head>
+<body>
+    <div class="content-container text-center">
+        <h1>Предпросмотр</h1>
+
+        <div class="video-container">
+            <div class="video-column">
+                <h3>Оригинальное видео</h3>
+                <video id="originalVideo" controls>
+                    <source src="{{ url_for('static', filename='uploads/' + original_filename) }}" type="video/mp4">
+                    Ваш браузер не поддерживает воспроизведение видео.
+                </video>
+            </div>
+
+            <div class="video-column">
+                <h3>Стабилизированное видео</h3>
+                <video id="stabilizedVideo" controls>
+                    <source src="{{ url_for('static', filename='stabilized/' + stabilized_filename_mp4) }}" type="video/mp4">
+                    Ваш браузер не поддерживает воспроизведение видео.
+                </video>
+            </div>
+        </div>
+
+        <br>
+
+        <button class="btn btn-secondary-custom" onclick="playBothVideos()">Воспроизвести оба видео</button>
+
+        <br>
+
+        <a href="{{ url_for('download_file', filename=stabilized_filename) }}" class="btn btn-custom" style="margin-top: 2px;">
+            Скачать стабилизированное видео
+        </a>
+
+        <br>
+
+        <a href="/" class="btn btn-secondary-custom" style="margin-top: 20px;">Назад</a>
+    </div>
+
+    <script>
+        function playBothVideos() {
+            var originalVideo = document.getElementById('originalVideo');
+            var stabilizedVideo = document.getElementById('stabilizedVideo');
+
+            originalVideo.currentTime = 0;
+            stabilizedVideo.currentTime = 0;
+
+            originalVideo.play();
+            stabilizedVideo.play();
+        }
+    </script>
+</body>
+</html>

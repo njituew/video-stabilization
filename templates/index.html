@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Стабилизация видео</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #0B0C10;
+            color: #C5C6C7;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+        .content-container {
+            background-color: #1F2833;
+            padding: 50px;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+            width: 80%;
+            max-width: 800px;
+        }
+        h1 {
+            margin-bottom: 40px;
+            color: #66FCF1;
+        }
+        .slider-container {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 40px;
+            gap: 40px;
+        }
+        .slider-group {
+            display: flex;
+            align-items: center;
+            gap: 10px; /* Расстояние между слайдером и значением */
+        }
+        .slider {
+            width: 150px;
+        }
+        .slider-value {
+            width: 40px;
+            text-align: center;
+            background-color: #0B0C10;
+            color: #C5C6C7;
+            border: none;
+            border-radius: 4px;
+            padding: 2px;
+        }
+        .form-control-file {
+            background-color: #1F2833;
+            color: #C5C6C7;
+            border: none;
+            padding: 8px;
+            border-radius: 4px;
+        }
+        .btn-custom {
+            background-color: #66FCF1;
+            border-color: #66FCF1;
+            color: #0B0C10;
+            transition: background-color 0.3s, color 0.3s; /* Плавный переход */
+        }
+        .btn-custom:hover,
+        .btn-custom:focus,
+        .btn-custom:active {
+            background-color: #0B0C10; /* Цвет фона при наведении, фокусе и нажатии */
+            color: #66FCF1; /* Цвет текста при наведении, фокусе и нажатии */
+        }
+        .loading {
+            display: none;
+            margin-top: 30px;
+        }
+        .error {
+            color: #ff4d4d;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="content-container text-center">
+        <h1>Стабилизация видео 🎬</h1>
+        <form action="/upload" method="post" enctype="multipart/form-data" id="uploadForm">
+            <div class="form-group">
+                <input type="file" name="file" class="form-control-file" id="fileInput" required>
+            </div>
+            
+            <div class="slider-container">
+                <div class="slider-group">
+                    <label for="shakiness">Shakiness:</label>
+                    <input type="range" id="shakiness" name="shakiness" class="slider" min="1" max="10" value="10">
+                    <input type="text" id="shakinessValue" class="slider-value" value="10" readonly>
+                </div>
+                <div class="slider-group">
+                    <label for="smoothing">Smoothing:</label>
+                    <input type="range" id="smoothing" name="smoothing" class="slider" min="0" max="45" value="30">
+                    <input type="text" id="smoothingValue" class="slider-value" value="30" readonly>
+                </div>
+            </div>
+            
+            <button type="submit" class="btn btn-custom" style="margin-bottom: 30px;">Стабилизировать</button>
+        </form>
+        
+        {% if error %}
+        <div class="error">{{ error }}</div>
+        {% endif %}
+
+        <div class="loading" id="loadingMessage">
+            <h3>Стабилизация... Пожалуйста, подождите.</h3>
+            <div class="spinner-border" role="status">
+                <span class="sr-only">Загрузка...</span>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    
+    <script>
+        $(document).ready(function() {
+            // Обновление значения слайдера в текстовом поле
+            $('.slider').on('input', function() {
+                const value = $(this).val();
+                $(`#${$(this).attr('id')}Value`).val(value);
+            });
+    
+            // Показать индикатор загрузки при отправке формы
+            $('#uploadForm').on('submit', function() {
+                $('#loadingMessage').show();
+                $('.error').hide();
+            });
+    
+            // Скрыть индикатор загрузки при загрузке страницы назад из истории
+            $(window).on('pageshow', function(event) {
+                if (event.originalEvent.persisted) {
+                    $('#loadingMessage').hide();
+                }
+            });
+        });
+    </script>
+</body>
+</html>
